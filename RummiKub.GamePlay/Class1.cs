@@ -10,7 +10,7 @@
   //(done) 2 jokers wild
   //(misc.) racks: one per player
 
-  //each player gets 14 tiles
+  //(done)each player gets 14 tiles
 
   //set: 3 or 4 same number all different colors e.g. 7d 7c 7h
   //run: sequence 3+ consecutive numbers all the same color 4c 5c 6c

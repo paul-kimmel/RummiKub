@@ -7,8 +7,15 @@
       Pool = GetTiles();
       Shuffle(Pool);
     }
+
+    public static void Init()
+    {
+      Pool = GetTiles();
+      Shuffle(Pool);
+    }
+            
+    public static List<Tile> Pool { get; set; }
     
-    public static List<Tile> Pool { get; set; } 
 
     public static Tile GetRandomTile()
     {

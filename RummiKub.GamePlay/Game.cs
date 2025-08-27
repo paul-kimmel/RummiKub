@@ -8,6 +8,7 @@
 #pragma warning disable CS8618
     public Game(string[] playerNames)
     {
+      TilePool.Init();
       Init(playerNames);
     }
 #pragma warning restore CS8618

@@ -19,15 +19,41 @@ namespace RummiKub.GamePlay.Test
     [Fact]
     public void GetPoolTest()
     {
+      TilePool.Init();
       var pool = TilePool.Pool;
       pool.Count.Dump(writer);
       pool.Dump(writer);
       
       pool.Given(pool.Count == 106, writer);
       pool.Expect();
+    }
 
+    [Fact]
+    public void ContainsSetTest()
+    {
+      TilePool.Init();
+      var pool = TilePool.Pool;
+      var o = TileSet.ContainsSet(pool);
+      o.Given(o, writer);
+      o.Expect();
+    }
 
+    [Fact]
+    public void GetFirstSetTest()
+    { 
+      TilePool.Init();
+      var pool = TilePool.Pool;
+      var o = TileSet.GetFirstSet(pool);
+      o.Dump(writer);
 
+      o.Given(o.Count > 0, writer);
+      o.Expect();
+    }
+
+    [Fact]
+    public void GetFirstSetWithJokerTest()
+    {
+      Assert.Fail("Not implemented yet");
     }
   }
 }
