@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using RummiKub.GamePlay;
+using System.Diagnostics;
 
 namespace RummiKub.Docker.Controllers
 {
@@ -7,10 +9,18 @@ namespace RummiKub.Docker.Controllers
   [ApiController]
   public class Cards : ControllerBase
   {
-
+    [HttpGet]
     public string GetCard(string name)
     {
-
+      try
+      {
+        return CardFactory.GetCard(name);
+      }
+      catch(Exception ex)
+      {
+        Debug.WriteLine(ex.Message);
+        return string.Empty;
+      }
 
     }
 

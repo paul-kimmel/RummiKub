@@ -29,7 +29,7 @@ namespace Resources.Properties {
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resources() {
+        public Resources() {
         }
         
         /// <summary>
@@ -486,6 +486,16 @@ namespace Resources.Properties {
         public static byte[] JH {
             get {
                 object obj = ResourceManager.GetObject("JH", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] Joker {
+            get {
+                object obj = ResourceManager.GetObject("Joker", resourceCulture);
                 return ((byte[])(obj));
             }
         }

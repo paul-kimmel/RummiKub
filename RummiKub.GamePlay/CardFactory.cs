@@ -34,6 +34,11 @@ namespace RummiKub.GamePlay
 
     public static string GetCardName(ITile tile)
     {
+      if(tile.IsJoker())
+      {
+        return "Joker";
+      } 
+
       return $"{GetCardFace(tile)}{GetCardSuit(tile)}";
     }
 

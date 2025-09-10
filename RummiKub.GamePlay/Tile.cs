@@ -50,7 +50,7 @@ namespace RummiKub.GamePlay
     private static readonly Tile _empty = new Tile();
     public static Tile Empty { get { return _empty; } }
 
-    public string CardName => CardFactory.GetCardName(this);
+    public virtual string CardName => CardFactory.GetCardName(this);
     
   }
 

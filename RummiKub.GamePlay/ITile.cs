@@ -1,12 +1,11 @@
 ﻿namespace RummiKub.GamePlay
 {
-  public interface ITile
+  public interface ITile : ICardTile
   {
-    static abstract Tile Empty { get; }
     TileColor Color { get; set; }
     string Name { get; }
 
-    string CardName { get; }
+    
 
     TileValue Value { get; set; }
 

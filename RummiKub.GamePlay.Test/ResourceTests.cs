@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using Tools;
+﻿using Tools;
 using Tools.Core;
 using Xunit.Abstractions;
 using Cards = Resources.Properties.Resources;
@@ -30,12 +29,24 @@ namespace RummiKub.GamePlay.Test
     }
 
     [Fact]
+
+    public void GetJokerTest()
+    {
+      var o = CardFactory.GetCard("Joker");
+      o.Dump(writer);
+      o.Given(!string.IsNullOrEmpty(o), writer);
+      o.Expect(writer);
+      WindowRenderer.DrawImage(o);
+    }
+
+    [Fact]
     public void CardFactoryTest()
     {
       var o = CardFactory.GetCard("10C");
       o.Dump(writer);
       o.Given(!string.IsNullOrEmpty(o), writer);
-      o.Expect();
+      o.Expect(writer);
+      WindowRenderer.DrawImage(o);
     }
   }
 }

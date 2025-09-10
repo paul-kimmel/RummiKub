@@ -12,5 +12,7 @@
       Value = TileValue.Joker;
       Color = TileColor.Red;
     }
+
+    public override string CardName => CardFactory.GetCardName(this);
   }
 }

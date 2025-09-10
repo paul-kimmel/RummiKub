@@ -30,12 +30,12 @@ namespace Tools
       return list.Serialize().Deserialize<List<T>>();
     }
 
-    internal static string Serialize<T>(this T o)
+    public static string Serialize<T>(this T o)
     {
       return JsonConvert.SerializeObject(o);
     }
 
-    internal static T Deserialize<T>(this string o)
+    public static T Deserialize<T>(this string o)
     {
       return JsonConvert.DeserializeObject<T>(o);
     }

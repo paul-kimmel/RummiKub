@@ -1,3 +1,4 @@
+using System.Linq;
 using Tools;
 using Tools.Core;
 using Xunit.Abstractions;
@@ -69,6 +70,19 @@ namespace RummiKub.GamePlay.Test
 
       o.Given(o.Count > 0, writer);
       o.Expect();
+    }
+
+    [Fact]
+    public void DrawRunTest()
+    {
+      TilePool.Init();
+      var pool = TilePool.Pool;
+      var o = TileSet.GetFirstRun(pool);
+      o.Dump(writer);
+
+      o.Given(o.Count > 0, writer);
+      o.Expect();
+      WindowRenderer.DrawRun(o);
     }
 
     [Fact]
