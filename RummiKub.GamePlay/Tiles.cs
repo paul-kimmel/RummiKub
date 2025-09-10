@@ -2,6 +2,8 @@
 {
   public class Tiles : ITiles
   {
+    //STOPPED: We need to handle jokers for sets and runs and
+    //apply a joker to every possible set and run and then figure out the best , most advantageous placement of the joker and then get rid of the joker where it isn't the best use
     public List<Tile> List { get; set; } = new List<Tile>();
 
     public bool ContainsRun()

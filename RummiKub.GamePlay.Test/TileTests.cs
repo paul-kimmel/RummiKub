@@ -6,7 +6,6 @@ namespace RummiKub.GamePlay.Test
 {
   public class TileTests
   {
-
     private readonly ITestOutputHelper output;
     private readonly TestOutputWriter writer;
 
@@ -39,6 +38,16 @@ namespace RummiKub.GamePlay.Test
     }
 
     [Fact]
+    public void ContainsRunTest()
+    {
+      TilePool.Init();
+      var pool = TilePool.Pool;
+      var o = TileSet.ContainsRun(pool);
+      o.Given(o, writer);
+      o.Expect(writer);
+    }
+
+    [Fact]
     public void GetFirstSetTest()
     { 
       TilePool.Init();
@@ -48,6 +57,32 @@ namespace RummiKub.GamePlay.Test
 
       o.Given(o.Count > 0, writer);
       o.Expect();
+    }
+
+    [Fact]
+    public void GetFirstRunTest()
+    {
+      TilePool.Init();
+      var pool = TilePool.Pool;
+      var o = TileSet.GetFirstRun(pool);
+      o.Dump(writer);
+
+      o.Given(o.Count > 0, writer);
+      o.Expect();
+    }
+
+    [Fact]
+    public void GetCardName()
+    {
+      TilePool.Init();
+      var pool = TilePool.Pool;
+      var o = TileSet.GetFirstRun(pool);
+      var card = o.First();
+      card.Name.Dump(writer);
+      card.CardName.Dump(writer);
+
+      card.Given(card.CardName == "AH", writer);
+      card.Expect(writer);
     }
 
     [Fact]

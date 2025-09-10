@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RummiKub.GamePlay
 {
-  public class Tile
+  public class Tile : ITile
   {
     public virtual TileValue Value { get; set; }
     public virtual TileColor Color { get; set; }
@@ -14,7 +14,7 @@ namespace RummiKub.GamePlay
     public string Name => ToString();
 
     public virtual bool IsJoker()
-    { 
+    {
       //TODO: We need acting value for jokers
       return GetScore() == 30;
     }
@@ -49,6 +49,9 @@ namespace RummiKub.GamePlay
 
     private static readonly Tile _empty = new Tile();
     public static Tile Empty { get { return _empty; } }
+
+    public string CardName => CardFactory.GetCardName(this);
+    
   }
 
 }
