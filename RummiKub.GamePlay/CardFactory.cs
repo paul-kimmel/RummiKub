@@ -23,7 +23,7 @@ namespace RummiKub.GamePlay
         }
         var property = typeof(Cards).GetProperty(name);
         var result = (byte[])property.TryGetValue(null);
-        return result.ToBitmap().GetBase64PictureString_BugFix();
+        return $"data:image/png;base64,{Convert.ToBase64String(result)}";
       }
       catch(Exception ex)
       {
