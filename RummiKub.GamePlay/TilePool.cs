@@ -2,6 +2,8 @@
 {
   public static class TilePool
   {
+    private static readonly int STARTING_HAND_SIZE = 14;
+
     static TilePool()
     {
       Pool = GetTiles();
@@ -26,18 +28,50 @@
       return o;
     }
 
+    public static Tile GetCard(string name)
+    {
+      var index = Pool.FindIndex(o => o.CardName == name);
+      var o = Pool[index];
+      Pool.RemoveAt(index);
+      return o;
+    }
+
     public static List<Tile> GetStartingHand()
     {
       var list = new List<Tile>();
 
-      for(var i = 0; i< 14; i++)
+      for (var i = 0; i < STARTING_HAND_SIZE; i++)
       {
-        list.Add(GetRandomTile());
+        list.Add(TilePool.GetRandomTile());
       }
 
       return list;
     }
-    
+
+    public static List<Tile> GetStartingHandWithJoker(int jokerCount = 0)
+    {
+      Guard(jokerCount >= 0 && jokerCount <= 2, () => throw new ArgumentOutOfRangeException(nameof(jokerCount)));
+      //for testing
+      var list = new List<Tile>();
+
+      for (var i = 0; i < jokerCount; i++)
+      {
+        list.Add(GetCard("Joker"));
+      }
+
+      for (var i = 0; i < 14 - jokerCount; i++)
+      {
+        list.Add(TilePool.GetRandomTile());
+      }
+      return list;
+    }
+
+    static void Guard(bool v, Action action)
+    {
+      if (!v)
+        action();
+    }
+
     public static List<Tile> GetTiles()
     {
       var list = new List<Tile>();
