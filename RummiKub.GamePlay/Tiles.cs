@@ -1,4 +1,7 @@
-﻿namespace RummiKub.GamePlay
+﻿using System.Diagnostics;
+using Tools;
+
+namespace RummiKub.GamePlay
 {
   public class Tiles : ITiles
   {
@@ -43,6 +46,25 @@
 
     public static List<Tile> GetFirstRun(List<Tile> tiles)
     {
+      return GetFirstRun(tiles, 3);
+    }
+
+    public static List<Tile> GetHighestRun(List<Tile> tiles)
+    {
+      var runs = tiles.GetAllRuns();
+
+      if (runs.Count > 0)
+      {
+        runs.Dump();
+        return runs.OrderByDescending(o => o.GetScore()).First();
+      }
+
+      return new List<Tile>();
+
+    }
+
+    public static List<Tile> GetFirstRun(List<Tile> tiles, int runLength = 3)
+    {
       if (tiles == null || tiles.Count == 0) return new List<Tile>();
 
       foreach (var color in Enum.GetValues(typeof(TileColor)))
@@ -69,13 +91,13 @@
           }
           else
           {
-            if (run.Count >= 3) return run;
+            if (run.Count >= runLength) return run;
             run.Clear();
             run.Add(current);
           }
         }
 
-        if (run.Count >= 3) return run;
+        if (run.Count >= runLength) return run;
       }
 
       return new List<Tile>();
@@ -85,6 +107,19 @@
     public List<Tile> GetTiles()
     {
       return List;
+    }
+
+    public int GetScore()
+    {
+      try
+      {
+        return List.Sum(o => o.GetScore());
+      }
+      catch(Exception ex)
+      {
+        Debug.WriteLine(ex.Message);
+        return 0;
+      }
     }
   }
 }

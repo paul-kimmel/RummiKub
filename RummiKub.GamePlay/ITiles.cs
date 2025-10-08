@@ -5,5 +5,7 @@
     bool ContainsSet();
     bool ContainsRun();
     List<Tile> GetTiles();
+
+    int GetScore();
   }
 }
