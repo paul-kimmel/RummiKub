@@ -5,6 +5,14 @@
     text-align: center;
 }
 
+html,body{
+  border: 1px solid red;
+  padding: 0;
+  margin: 0;
+  height: 100vh;
+  
+}
+
 th, td {
     padding-left: 1rem;
     padding-right: 1rem;
