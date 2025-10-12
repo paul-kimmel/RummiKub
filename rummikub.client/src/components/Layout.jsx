@@ -3,7 +3,7 @@ import './layout.css';
 
 function Layout() {
   return (
-    <div>
+    <div class="layout">
       <NavMenu />
       Layout Component
     </div>
