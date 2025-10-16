@@ -49,18 +49,20 @@ namespace RummiKub.GamePlay
       return GetFirstRun(tiles, 3);
     }
 
+    public static List<Tile> GetHighest(List<List<Tile>> series)
+    {
+      if (series == null || series.Count == 0) return new List<Tile>();
+      return series.OrderByDescending(o => o.GetScore()).First();
+    }
+
+    public static List<Tile> GetHighestSet(List<Tile> tiles)
+    {
+      return GetHighest(tiles.GetAllSets());
+    }
+
     public static List<Tile> GetHighestRun(List<Tile> tiles)
     {
-      var runs = tiles.GetAllRuns();
-
-      if (runs.Count > 0)
-      {
-        runs.Dump();
-        return runs.OrderByDescending(o => o.GetScore()).First();
-      }
-
-      return new List<Tile>();
-
+      return GetHighest(tiles.GetAllRuns());
     }
 
     public static List<Tile> GetFirstRun(List<Tile> tiles, int runLength = 3)
