@@ -57,8 +57,37 @@ namespace RummiKub.GamePlay
       return result;
     }
 
+    public static List<Tile> GetFirstRunWithJoker(this List<Tile> tiles)
+    {
+      //Debugger.Break();
+      var run = Tiles.GetFirstRun(tiles);
+      if (run.Count >= 3 && HasJoker(tiles))
+      {
+        /* if the lowest is one (1) and the highest is thirteen (13) we can't add the joker
+         */
+        var index = tiles.FindIndex(o => o.IsJoker());
+        if (run[0].Value == TileValue.One && run[run.Count - 1].Value == TileValue.Thirteen)
+        {
+          //do nothing
+        }
+        else if (run[^1].Value == TileValue.Thirteen)
+        {
+          //add at the the beginning
+          run.Insert(0, tiles[index]);
+        }
+        else if(run[0].Value == TileValue.One)
+        {
+          //add at the end
+          run.Add(tiles[index]);
+        }
+      }
+
+      return run;
+    }
+
     public static List<Tile> GetFirstSetWithJoker(this List<Tile> tiles)
     {
+      //Debugger.Break();
       var set = Tiles.GetFirstSet(tiles);
       if (set.Count == 3 && HasJoker(tiles))
       {
@@ -136,7 +165,7 @@ namespace RummiKub.GamePlay
     {
       try
       {
-        return tiles.Sum(o => o.GetScore());
+        return new Tiles() { List = tiles }.GetScore();
       }
       catch (Exception ex)
       {

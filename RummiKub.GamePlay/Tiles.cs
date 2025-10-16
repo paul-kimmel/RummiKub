@@ -6,7 +6,7 @@ namespace RummiKub.GamePlay
   public class Tiles : ITiles
   {
     //STOPPED: We need to handle jokers for sets and runs and
-    //apply a joker to every possible set and run and then figure out the best , most advantageous placement of the joker and then get rid of the joker where it isn't the best use
+    //apply a joker to every possible set and run and then figure out the best, most advantageous placement of the joker and then get rid of the joker where it isn't the best use
     public List<Tile> List { get; set; } = new List<Tile>();
 
     public bool ContainsRun()
@@ -111,13 +111,61 @@ namespace RummiKub.GamePlay
       return List;
     }
 
-    public int GetScore()
+    public virtual int GetScore()
     {
       try
       {
-        return List.Sum(o => o.GetScore());
+        return ContainsSet() ? GetSetScore() : GetRunScore();
+      }
+      catch (Exception ex)
+      {
+        Debug.WriteLine(ex.Message);
+        return 0;
+      }
+    }
+
+    
+    protected virtual int GetRunScore()
+    {
+      try
+      {
+        int startIndex = Array.FindIndex(List.ToArray(), n => (int)n.Value != 30);
+        int startValue = (int)List[startIndex].Value;
+        TileColor startColor = List[startIndex].Color;
+
+        //backfill
+        for (int i = startIndex - 1; i >= 0; i--)
+          List[i].Value = (TileValue)List[i + 1].Value - 1;
+
+        //forward fill
+        for (int i = startIndex + 1; i < List.Count; i++)
+        {
+          if ((int)List[i].Value == 30)
+          {
+            List[i].Value = (TileValue)List[i - 1].Value + 1;
+            List[i].Color = startColor;
+          }
+            
+        }
+
+        return List.Sum(x => (int)x.Value);
       }
       catch(Exception ex)
+      {
+        Debug.WriteLine(ex.Message);
+        return 0;
+      }
+    }
+
+
+    protected virtual int GetSetScore()
+    {
+      try
+      {
+        var o = this.List.Where(x => x.IsJoker() == false).First().Value;
+        return (int)o * this.List.Count;
+      }
+      catch (Exception ex)
       {
         Debug.WriteLine(ex.Message);
         return 0;

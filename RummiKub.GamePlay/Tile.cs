@@ -15,8 +15,7 @@ namespace RummiKub.GamePlay
 
     public virtual bool IsJoker()
     {
-      //TODO: We need acting value for jokers
-      return GetScore() == 30;
+      return this.GetType() == typeof(Joker); 
     }
 
     public virtual int GetScore()
