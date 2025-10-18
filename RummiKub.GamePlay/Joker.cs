@@ -13,6 +13,15 @@
       Color = TileColor.Red;
     }
 
+    public override Joker Clone()
+    {
+      return new Joker()
+      {
+        Color = this.Color,
+        Value = this.Value
+      };
+    }
+    
     public override string CardName => CardFactory.GetCardName(this);
   }
 }

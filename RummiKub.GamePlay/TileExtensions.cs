@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using FluentValidation.Validators;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace RummiKub.GamePlay
@@ -31,6 +32,35 @@ namespace RummiKub.GamePlay
       return result;
     }
 
+    public static List<List<Tile>> GetAllRunsWithJoker(this List<Tile> tiles)
+    {
+      if (tiles == null || tiles.Count == 0) return new List<List<Tile>>();
+
+      var clone = tiles.Clone();
+      var result = new List<List<Tile>>();
+
+      while (true)
+      {
+        // this add ths joker to each possible but allows it to be reused for each possible run
+        var run = Tiles.GetFirstRun(clone);
+
+        if (run.Count() > 0)
+        {
+          run = run.AddJoker(clone);
+          result.Add(run);
+          //do not remove joker
+          clone.RemoveSetSkipJoker(run);
+        }
+        else
+        {
+          break;
+        }
+      }
+
+      return result;
+
+    }
+
     public static List<List<Tile>> GetAllRuns(this List<Tile> tiles)
     {
       if (tiles == null || tiles.Count == 0) return new List<List<Tile>>();
@@ -60,29 +90,50 @@ namespace RummiKub.GamePlay
     public static List<Tile> GetFirstRunWithJoker(this List<Tile> tiles)
     {
       //Debugger.Break();
-      var run = Tiles.GetFirstRun(tiles);
-      if (run.Count >= 3 && HasJoker(tiles))
+      return Tiles.GetFirstRun(tiles).AddJoker(tiles);
+    }
+
+    public static List<Tile> AddJoker(this List<Tile> run, List<Tile> tiles)
+    {
+      if (run.Count >= 2 && HasJoker(tiles))
       {
-        /* if the lowest is one (1) and the highest is thirteen (13) we can't add the joker
-         */
-        var index = tiles.FindIndex(o => o.IsJoker());
-        if (run[0].Value == TileValue.One && run[run.Count - 1].Value == TileValue.Thirteen)
+        if (IsFullRun(run))
         {
-          //do nothing
+          //Noop
         }
-        else if (run[^1].Value == TileValue.Thirteen)
+        else if (RunEndsInThirteen(run))
         {
-          //add at the the beginning
-          run.Insert(0, tiles[index]);
+          PrependJoker(tiles, run);
         }
-        else if(run[0].Value == TileValue.One)
+        else
         {
-          //add at the end
-          run.Add(tiles[index]);
+          AppendJoker(tiles, run);
         }
       }
 
       return run;
+    }
+
+    private static void AppendJoker(List<Tile> tiles, List<Tile> run)
+    {
+      var index = tiles.FindIndex(o => o.IsJoker());
+      run.Add(tiles[index].Clone());
+    }
+
+    private static void PrependJoker(List<Tile> tiles, List<Tile> run)
+    {
+      var index = tiles.FindIndex(o => o.IsJoker());
+      run.Insert(0, tiles[index].Clone());
+    }
+
+    private static bool RunEndsInThirteen(List<Tile> run)
+    {
+      return run[^1].Value == TileValue.Thirteen;
+    }
+
+    private static bool IsFullRun(List<Tile> run)
+    {
+      return run[0].Value == TileValue.One && run[^1].Value == TileValue.Thirteen;
     }
 
     public static List<Tile> GetFirstSetWithJoker(this List<Tile> tiles)
@@ -102,7 +153,7 @@ namespace RummiKub.GamePlay
     {
       try
       {
-        return tiles.Find(o => o.IsJoker()) != null;
+        return tiles.Find(o => o.IsJoker()) is not null;
       }
       catch (Exception ex)
       {
@@ -111,14 +162,7 @@ namespace RummiKub.GamePlay
       }
     }
 
-    public static Tile Clone(this Tile source)
-    {
-      return new Tile()
-      {
-        Color = source.Color,
-        Value = source.Value
-      };
-    }
+  
 
     public static List<Tile> Clone(this List<Tile> source)
     {
@@ -135,6 +179,15 @@ namespace RummiKub.GamePlay
     {
       foreach (var o in set)
       {
+        parent.Remove(o);
+      }
+    }
+
+    public static void RemoveSetSkipJoker(this List<Tile> parent, List<Tile> set)
+    {
+      foreach (var o in set)
+      {
+        if(o is not null && o.IsJoker()) continue;
         parent.Remove(o);
       }
     }
@@ -198,8 +251,5 @@ namespace RummiKub.GamePlay
         return new List<Tile>();
       }
     }
-
-
   }
-
 }

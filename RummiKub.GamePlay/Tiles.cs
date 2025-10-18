@@ -65,6 +65,11 @@ namespace RummiKub.GamePlay
       return GetHighest(tiles.GetAllRuns());
     }
 
+    public static List<Tile> GetHighestRunWithJoker(List<Tile> tiles)
+    {
+      return GetHighest(tiles.GetAllRunsWithJoker());
+    }
+
     public static List<Tile> GetFirstRun(List<Tile> tiles, int runLength = 3)
     {
       if (tiles == null || tiles.Count == 0) return new List<Tile>();

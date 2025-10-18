@@ -23,6 +23,18 @@ namespace RummiKub.GamePlay
       return (int)Value;
     }
 
+    public virtual Tile Clone()
+    {
+      return new Tile()
+      {
+        Color = this.Color,
+        Value = this.Value
+      };
+    }
+
+    
+
+
     public static Tile GetJoker()
     {
       return new Joker() { Value = TileValue.Joker, Color = TileColor.Red };
