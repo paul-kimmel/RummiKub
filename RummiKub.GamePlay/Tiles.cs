@@ -129,37 +129,11 @@ namespace RummiKub.GamePlay
       }
     }
 
-    
+   
+
     protected virtual int GetRunScore()
     {
-      try
-      {
-        int startIndex = Array.FindIndex(List.ToArray(), n => (int)n.Value != 30);
-        int startValue = (int)List[startIndex].Value;
-        TileColor startColor = List[startIndex].Color;
-
-        //backfill
-        for (int i = startIndex - 1; i >= 0; i--)
-          List[i].Value = (TileValue)List[i + 1].Value - 1;
-
-        //forward fill
-        for (int i = startIndex + 1; i < List.Count; i++)
-        {
-          if ((int)List[i].Value == 30)
-          {
-            List[i].Value = (TileValue)List[i - 1].Value + 1;
-            List[i].Color = startColor;
-          }
-            
-        }
-
-        return List.Sum(x => (int)x.Value);
-      }
-      catch(Exception ex)
-      {
-        Debug.WriteLine(ex.Message);
-        return 0;
-      }
+      return List.GetTilePseudoValues().Sum(x => (int)x.Value);
     }
 
 

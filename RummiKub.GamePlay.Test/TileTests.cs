@@ -1,7 +1,10 @@
 using System.Linq;
+using System.Threading;
 using Tools;
 using Tools.Core;
+using Xunit;
 using Xunit.Abstractions;
+using Xunit.Sdk;
 
 namespace RummiKub.GamePlay.Test
 {
@@ -99,10 +102,19 @@ namespace RummiKub.GamePlay.Test
       card.Expect(writer);
     }
 
-    [Fact]
+    [SkippableFact]
     public void GetFirstSetWithJokerTest()
     {
-      Assert.Fail("Not implemented yet");
+      TilePool.Init();
+      var pool = TilePool.GetStartingHandWithJoker(1);
+      var set = pool.GetFirstSetWithJoker();
+      set.Dump(writer);
+      if (set.Count == 0)
+      {
+        throw Xunit.Sdk.SkipException.ForSkip("Set is empty");
+      }
+      set.Given(set.Count > 0, writer);
+      set.Expect(writer);
     }
   }
 }

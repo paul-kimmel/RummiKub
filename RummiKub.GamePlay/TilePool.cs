@@ -21,6 +21,11 @@
 
     public static Tile GetRandomTile()
     {
+      return Draw();
+    }
+
+    public static Tile Draw()
+    {
       var random = new Random(DateTime.Now.Millisecond);
       var index = random.Next(0, Pool.Count);
       var o = Pool[index];

@@ -1,6 +1,7 @@
 ﻿using FluentValidation.Validators;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace RummiKub.GamePlay
 {
@@ -41,12 +42,12 @@ namespace RummiKub.GamePlay
 
       while (true)
       {
-        // this add ths joker to each possible but allows it to be reused for each possible run
+        // this add the joker to each possible but allows it to be reused for each possible run
         var run = Tiles.GetFirstRun(clone);
 
         if (run.Count() > 0)
         {
-          run = run.AddJoker(clone);
+          run = run.AddJokers(clone);
           result.Add(run);
           //do not remove joker
           clone.RemoveSetSkipJoker(run);
@@ -93,6 +94,15 @@ namespace RummiKub.GamePlay
       return Tiles.GetFirstRun(tiles).AddJoker(tiles);
     }
 
+    public static List<Tile> AddJokers(this List<Tile> run, List<Tile> tiles)
+    {
+      foreach(var joker in tiles.Where(o => o.IsJoker()))
+      {
+        run = run.AddJoker(tiles);
+      }
+      return run;
+    }
+
     public static List<Tile> AddJoker(this List<Tile> run, List<Tile> tiles)
     {
       if (run.Count >= 2 && HasJoker(tiles))
@@ -128,8 +138,40 @@ namespace RummiKub.GamePlay
 
     private static bool RunEndsInThirteen(List<Tile> run)
     {
-      return run[^1].Value == TileValue.Thirteen;
+      //BUG: This doesn't work with multi Jokers. If the run ends in 12 and a joker is added then it will still be a joker until scoring. Logic fail.
+      return run.GetTilePseudoValues()[^1].Value == TileValue.Thirteen;
     }
+    public static List<Tile> GetTilePseudoValues(this List<Tile> tiles)
+    {
+      try
+      {
+        int startIndex = Array.FindIndex(tiles.ToArray(), n => (int)n.Value != 30);
+        int startValue = (int)tiles[startIndex].Value;
+        TileColor startColor = tiles[startIndex].Color;
+
+        //backfill
+        for (int i = startIndex - 1; i >= 0; i--)
+          tiles[i].Value = (TileValue)tiles[i + 1].Value - 1;
+
+        //forward fill
+        for (int i = startIndex + 1; i < tiles.Count; i++)
+        {
+          if ((int)tiles[i].Value == 30)
+          {
+            tiles[i].Value = (TileValue)tiles[i - 1].Value + 1;
+            tiles[i].Color = startColor;
+          }
+        }
+
+        return tiles;
+      }
+      catch (Exception ex)
+      {
+        Debug.WriteLine(ex.Message);
+        return new List<Tile>();
+      }
+    }
+
 
     private static bool IsFullRun(List<Tile> run)
     {
@@ -195,6 +237,11 @@ namespace RummiKub.GamePlay
     public static bool ContainsJoker(this List<Tile> list)
     {
       return list.Any(o => o.IsJoker());
+    }
+
+    public static int GetJokerCount(this List<Tile> list)
+    {
+      return list.Count(o => o.IsJoker());
     }
 
     public static Tile RemoveJoker(this List<Tile> list)
