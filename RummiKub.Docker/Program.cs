@@ -7,6 +7,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(options => {
+  options.AddPolicy("AllowRummikub", policy =>
+  {
+    policy.WithOrigins("https://localhost:30437")
+      .AllowAnyHeader()
+      .AllowAnyMethod();
+  });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -15,6 +24,8 @@ if (app.Environment.IsDevelopment())
   app.UseSwagger();
   app.UseSwaggerUI();
 }
+
+app.UseCors("AllowRummikub");
 
 app.UseHttpsRedirection();
 
